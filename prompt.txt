@@ -1,0 +1,48 @@
+Build me a full-stack web application called "SkillSwap" using the following technologies only:
+
+Frontend: HTML, CSS (with lively, attractive animations), JavaScript
+
+Backend: Python Flask (handles routes, sessions, and rendering templates)
+
+Database: Use SQLAlchemy as ORM, and SQLite for local storage
+
+Features:
+Landing Page with a beautiful animated interface that explains the purpose of the platform: "A peer-to-peer skill exchange portal to learn and teach skills for free".
+
+User Registration and Login system (using Flask sessions and password hashing).
+
+User Profile Page with bio, list of skills offered, and skills they want to learn.
+
+Dashboard where users can:
+
+Add new skills to teach (form)
+
+Browse skills offered by others
+
+Filter/search by category or skill name
+
+Request to learn a skill (AJAX or smooth transitions)
+
+Skill Requests Management:
+
+Accept or reject learning requests
+
+View all incoming requests for their offered skills
+
+(Optional but appreciated) Basic Messaging System between users once a request is accepted.
+
+Include smooth, eye-catching animations in:
+
+Landing page transitions
+
+Buttons, forms, modals
+
+Page transitions or skill card hover effects
+
+Use Flask Jinja templates to render HTML from the backend.
+
+The entire app must be responsive and mobile-friendly.
+
+Keep code modular and organized: use static/, templates/, and app.py.
+
+Do not use any external front-end libraries like React or Bootstrap. Use only vanilla HTML, CSS (with custom animations), and JavaScript.
