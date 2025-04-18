@@ -1,0 +1,32 @@
+skillswap/
+├── app.py              # Main Flask application
+├── models.py           # SQLAlchemy models
+├── config.py           # Configuration settings
+├── helpers.py          # Utility functions
+├── static/
+│   ├── css/
+│   │   ├── main.css    # Main stylesheet
+│   │   ├── animations.css  # Animation-specific styles
+│   │   └── responsive.css  # Responsive design rules
+│   ├── js/
+│   │   ├── main.js     # Main JavaScript file
+│   │   ├── animations.js # Animation-specific logic
+│   │   └── requests.js # AJAX handling for requests
+│   └── img/            # Images and icons
+└── templates/
+    ├── layout.html     # Base template
+    ├── index.html      # Landing page
+    ├── auth/
+    │   ├── login.html  # Login page
+    │   └── register.html # Registration page
+    ├── profile/
+    │   ├── view.html   # Profile view
+    │   └── edit.html   # Profile editing
+    ├── dashboard.html  # Main dashboard
+    ├── skills/
+    │   ├── add.html    # Add new skill form
+    │   ├── browse.html # Browse skills
+    │   └── manage.html # Manage requests
+    └── messages/
+        ├── inbox.html  # Message inbox
+        └── conversation.html # Individual conversation
