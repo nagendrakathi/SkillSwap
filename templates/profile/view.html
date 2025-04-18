@@ -1,0 +1,344 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ user.name }} | SkillSwap{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="profile-container animate-fade-in">
+    <div class="profile-header">
+      <div class="profile-avatar">
+        {% if user.avatar %}
+          <img src="{{ user.avatar }}" alt="{{ user.name }}">
+        {% else %}
+          {{ user.name[:1] }}
+        {% endif %}
+      </div>
+      
+      <div class="profile-info">
+        <h1 class="profile-username">{{ user.name }}</h1>
+        <p class="profile-joined">Member since {{ user.created_at.strftime('%B %Y') }}</p>
+        
+        {% if user.bio %}
+          <p class="profile-bio">{{ user.bio }}</p>
+        {% endif %}
+        
+        {% if current_user.is_authenticated and current_user.id == user.id %}
+          <div class="profile-actions mt-3">
+            <a href="{{ url_for('edit_profile') }}" class="btn btn-primary">
+              <i class="fas fa-edit"></i> Edit Profile
+            </a>
+            <a href="{{ url_for('add_skill') }}" class="btn btn-outline">
+              <i class="fas fa-plus"></i> Add Skill
+            </a>
+          </div>
+        {% else %}
+          <div class="profile-actions mt-3">
+            <a href="{{ url_for('send_message', username=user.username) }}" class="btn btn-primary">
+              <i class="fas fa-comment"></i> Message
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    
+    <div class="profile-content">
+      <div class="profile-tabs">
+        <button class="tab-btn active" data-tab="skills-teaching">Skills Teaching ({{ skills_teaching|length }})</button>
+        <button class="tab-btn" data-tab="skills-learning">Skills Learning ({{ skills_learning|length }})</button>
+        <button class="tab-btn" data-tab="reviews">Reviews ({{ reviews|length }})</button>
+      </div>
+      
+      <div class="tab-content">
+        <div class="tab-pane active" id="skills-teaching">
+          {% if skills_teaching %}
+            <div class="skills-grid">
+              {% for skill in skills_teaching %}
+                <div class="skill-card animate-fade-in" style="--delay: {{ loop.index0 * 0.1 }}s">
+                  <div class="skill-category">
+                    <span class="badge badge-primary">{{ skill.category }}</span>
+                  </div>
+                  <h3 class="skill-title">{{ skill.title }}</h3>
+                  <p class="skill-description">{{ skill.description | truncate(150) }}</p>
+                  <div class="skill-meta">
+                    <span class="skill-students">
+                      <i class="fas fa-user-friends"></i> {{ skill.student_count }} Student(s)
+                    </span>
+                    {% if current_user.is_authenticated and current_user.id != user.id %}
+                      <button class="btn btn-sm btn-primary request-skill-btn" 
+                              data-skill-id="{{ skill.id }}" 
+                              data-skill-title="{{ skill.title }}"
+                              data-teacher="{{ user.name }}">
+                        Request to Learn
+                      </button>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty-state">
+              <div class="empty-icon">
+                <i class="fas fa-chalkboard-teacher"></i>
+              </div>
+              <h3>No Skills Listed Yet</h3>
+              {% if current_user.is_authenticated and current_user.id == user.id %}
+                <p>Share your knowledge by adding skills you can teach.</p>
+                <a href="{{ url_for('add_skill') }}" class="btn btn-primary">Add Your First Skill</a>
+              {% else %}
+                <p>{{ user.name }} hasn't listed any teaching skills yet.</p>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+        
+        <div class="tab-pane" id="skills-learning">
+          {% if skills_learning %}
+            <div class="skills-grid">
+              {% for skill in skills_learning %}
+                <div class="skill-card animate-fade-in" style="--delay: {{ loop.index0 * 0.1 }}s">
+                  <div class="skill-category">
+                    <span class="badge badge-secondary">{{ skill.skill.category }}</span>
+                  </div>
+                  <h3 class="skill-title">{{ skill.skill.title }}</h3>
+                  <p class="skill-description">{{ skill.skill.description | truncate(150) }}</p>
+                  <div class="skill-meta">
+                    <span class="skill-teacher">
+                      <i class="fas fa-user"></i> Learning from {{ skill.teacher.name }}
+                    </span>
+                    <span class="skill-status badge 
+                      {% if skill.status == 'active' %}badge-success
+                      {% elif skill.status == 'pending' %}badge-warning
+                      {% else %}badge-secondary{% endif %}">
+                      {{ skill.status | capitalize }}
+                    </span>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty-state">
+              <div class="empty-icon">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+              <h3>Not Learning Any Skills Yet</h3>
+              {% if current_user.is_authenticated and current_user.id == user.id %}
+                <p>Start your learning journey by requesting to learn from other users.</p>
+                <a href="{{ url_for('browse_skills') }}" class="btn btn-primary">Browse Skills</a>
+              {% else %}
+                <p>{{ user.name }} isn't learning any skills yet.</p>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+        
+        <div class="tab-pane" id="reviews">
+          {% if reviews %}
+            <div class="reviews-list">
+              {% for review in reviews %}
+                <div class="review-card animate-fade-in" style="--delay: {{ loop.index0 * 0.1 }}s">
+                  <div class="review-header">
+                    <div class="reviewer-info">
+                      <div class="reviewer-avatar">
+                        {% if review.reviewer.avatar %}
+                          <img src="{{ review.reviewer.avatar }}" alt="{{ review.reviewer.name }}">
+                        {% else %}
+                          <div class="avatar-placeholder">{{ review.reviewer.name[:1] }}</div>
+                        {% endif %}
+                      </div>
+                      <div>
+                        <h4 class="reviewer-name">{{ review.reviewer.name }}</h4>
+                        <p class="review-date">{{ review.created_at.strftime('%B %d, %Y') }}</p>
+                      </div>
+                    </div>
+                    <div class="review-rating">
+                      {% for i in range(5) %}
+                        <i class="fas fa-star {% if i < review.rating %}filled{% endif %}"></i>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="review-skill">
+                    <span class="badge badge-primary">{{ review.skill.title }}</span>
+                  </div>
+                  <div class="review-content">
+                    <p>{{ review.content }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty-state">
+              <div class="empty-icon">
+                <i class="fas fa-star"></i>
+              </div>
+              <h3>No Reviews Yet</h3>
+              <p>Reviews will appear here once {{ user.name }} receives them.</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Request Skill Modal -->
+<div class="modal-backdrop" id="request-modal">
+  <div class="modal animate-slide-up">
+    <div class="modal-header">
+      <h3 class="modal-title">Request to Learn <span id="modal-skill-title"></span></h3>
+      <button class="modal-close" id="close-modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="request-form">
+        <input type="hidden" id="skill_id" name="skill_id">
+        
+        <div class="form-group">
+          <label for="message" class="form-label">Message to <span id="modal-teacher-name"></span></label>
+          <textarea id="message" name="message" class="form-control" rows="4" 
+                    placeholder="Introduce yourself and explain why you want to learn this skill..."
+                    required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="availability" class="form-label">Your Availability</label>
+          <select id="availability" name="availability" class="form-control" required>
+            <option value="">Select your availability</option>
+            <option value="weekdays">Weekdays</option>
+            <option value="evenings">Evenings</option>
+            <option value="weekends">Weekends</option>
+            <option value="flexible">Flexible</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="experience" class="form-label">Your Experience Level</label>
+          <select id="experience" name="experience" class="form-control" required>
+            <option value="">Select your experience level</option>
+            <option value="beginner">Beginner - No experience</option>
+            <option value="intermediate">Intermediate - Some experience</option>
+            <option value="advanced">Advanced - Looking to refine skills</option>
+          </select>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="cancel-request">Cancel</button>
+      <button class="btn btn-primary" id="submit-request">Send Request</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Tab functionality
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    
+    tabButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Deactivate all tabs
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabPanes.forEach(pane => pane.classList.remove('active'));
+        
+        // Activate clicked tab
+        this.classList.add('active');
+        const tabId = this.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+    
+    // Request skill modal functionality
+    const requestButtons = document.querySelectorAll('.request-skill-btn');
+    const requestModal = document.getElementById('request-modal');
+    const closeModal = document.getElementById('close-modal');
+    const cancelRequest = document.getElementById('cancel-request');
+    const submitRequest = document.getElementById('submit-request');
+    const skillIdInput = document.getElementById('skill_id');
+    const skillTitleEl = document.getElementById('modal-skill-title');
+    const teacherNameEl = document.getElementById('modal-teacher-name');
+    
+    requestButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const skillId = this.getAttribute('data-skill-id');
+        const skillTitle = this.getAttribute('data-skill-title');
+        const teacherName = this.getAttribute('data-teacher');
+        
+        skillIdInput.value = skillId;
+        skillTitleEl.textContent = skillTitle;
+        teacherNameEl.textContent = teacherName;
+        
+        requestModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+    
+    function closeRequestModal() {
+      requestModal.classList.remove('active');
+      document.body.style.overflow = '';
+      document.getElementById('request-form').reset();
+    }
+    
+    closeModal.addEventListener('click', closeRequestModal);
+    cancelRequest.addEventListener('click', closeRequestModal);
+    
+    requestModal.addEventListener('click', function(e) {
+      if (e.target === requestModal) {
+        closeRequestModal();
+      }
+    });
+    
+    submitRequest.addEventListener('click', function() {
+      const form = document.getElementById('request-form');
+      const formData = new FormData(form);
+      
+      // Basic form validation
+      let valid = true;
+      form.querySelectorAll('[required]').forEach(field => {
+        if (!field.value) {
+          valid = false;
+          field.classList.add('error');
+        } else {
+          field.classList.remove('error');
+        }
+      });
+      
+      if (!valid) return;
+      
+      // Submit request via AJAX
+      fetch('/skills/request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({
+          skill_id: formData.get('skill_id'),
+          message: formData.get('message'),
+          availability: formData.get('availability'),
+          experience: formData.get('experience')
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          showNotification(data.message, 'success');
+          closeRequestModal();
+          
+          // Update UI to show pending status
+          const requestBtn = document.querySelector(`[data-skill-id="${formData.get('skill_id')}"]`);
+          requestBtn.disabled = true;
+          requestBtn.textContent = 'Request Pending';
+          requestBtn.classList.remove('btn-primary');
+          requestBtn.classList.add('btn-outline');
+        } else {
+          showNotification(data.message, 'danger');
+        }
+      })
+      .catch(error => {
+        showNotification('An error occurred. Please try again.', 'danger');
+      });
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,222 @@
+{% extends 'layout.html' %}
+
+{% block title %}SkillSwap | Share Skills, Grow Together{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <div class="hero-content animate-fade-in">
+      <h1 class="hero-title">Learn and Teach Skills for Free</h1>
+      <p class="hero-subtitle">Join our community of passionate learners and teachers sharing knowledge one skill at a time.</p>
+      <div class="hero-cta">
+        <a href="{{ url_for('register') }}" class="btn btn-secondary btn-lg animate-bounce">Get Started Now</a>
+        <a href="{{ url_for('browse_skills') }}" class="btn btn-outline btn-lg">Browse Skills</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <div class="section-header text-center mb-4">
+      <h2>How SkillSwap Works</h2>
+      <p>Connect, learn, and grow with a community that values knowledge sharing</p>
+    </div>
+    
+    <div class="row">
+      <div class="col-4 animate-slide-up" style="--delay: 0.1s">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <h3>Create Your Profile</h3>
+          <p>Sign up and create your profile highlighting the skills you can teach and what you want to learn.</p>
+        </div>
+      </div>
+      
+      <div class="col-4 animate-slide-up" style="--delay: 0.3s">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3>Find Skills to Learn</h3>
+          <p>Browse through our diverse collection of skills taught by community members and request to learn.</p>
+        </div>
+      </div>
+      
+      <div class="col-4 animate-slide-up" style="--delay: 0.5s">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-handshake"></i>
+          </div>
+          <h3>Connect & Exchange</h3>
+          <p>Connect with others, schedule sessions, and exchange skills without any cost.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box animate-fade-in">
+      <div class="row align-items-center">
+        <div class="col-6">
+          <h2>Ready to Share Your Skills?</h2>
+          <p>Join thousands of people who are already sharing their knowledge and learning new skills every day.</p>
+        </div>
+        <div class="col-6 text-center">
+          <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg animate-pulse">Join SkillSwap Today</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials">
+  <div class="container">
+    <div class="section-header text-center mb-4">
+      <h2>What Our Community Says</h2>
+      <p>Hear from people who have transformed their lives through skill sharing</p>
+    </div>
+    
+    <div class="testimonials-carousel">
+      <div class="testimonial-item animate-fade-in">
+        <div class="testimonial-content">
+          <p>"I learned web development through SkillSwap and was able to land my first tech job within 6 months. The community is so supportive!"</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <div class="avatar-placeholder">S</div>
+          </div>
+          <div class="author-info">
+            <h4>Sarah K.</h4>
+            <p>Web Developer</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="testimonial-item animate-fade-in" style="--delay: 0.2s">
+        <div class="testimonial-content">
+          <p>"Teaching photography on SkillSwap has not only helped others but also improved my own skills significantly. It's a win-win!"</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <div class="avatar-placeholder">M</div>
+          </div>
+          <div class="author-info">
+            <h4>Michael T.</h4>
+            <p>Photographer</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="testimonial-item animate-fade-in" style="--delay: 0.4s">
+        <div class="testimonial-content">
+          <p>"I've learned three new languages thanks to native speakers on SkillSwap. Now I'm teaching my native language to others!"</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <div class="avatar-placeholder">L</div>
+          </div>
+          <div class="author-info">
+            <h4>Leila M.</h4>
+            <p>Language Enthusiast</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="categories">
+  <div class="container">
+    <div class="section-header text-center mb-4">
+      <h2>Popular Skill Categories</h2>
+      <p>Discover the most sought-after skills in our community</p>
+    </div>
+    
+    <div class="categories-grid">
+      <a href="{{ url_for('browse_skills', category='technology') }}" class="category-card animate-fade-in">
+        <div class="category-icon">
+          <i class="fas fa-laptop-code"></i>
+        </div>
+        <h3>Technology</h3>
+        <p>Programming, Web Development, Data Science</p>
+      </a>
+      
+      <a href="{{ url_for('browse_skills', category='languages') }}" class="category-card animate-fade-in" style="--delay: 0.1s">
+        <div class="category-icon">
+          <i class="fas fa-language"></i>
+        </div>
+        <h3>Languages</h3>
+        <p>Spanish, Mandarin, French, Sign Language</p>
+      </a>
+      
+      <a href="{{ url_for('browse_skills', category='arts') }}" class="category-card animate-fade-in" style="--delay: 0.2s">
+        <div class="category-icon">
+          <i class="fas fa-paint-brush"></i>
+        </div>
+        <h3>Arts & Crafts</h3>
+        <p>Painting, Drawing, Photography, Crafting</p>
+      </a>
+      
+      <a href="{{ url_for('browse_skills', category='music') }}" class="category-card animate-fade-in" style="--delay: 0.3s">
+        <div class="category-icon">
+          <i class="fas fa-music"></i>
+        </div>
+        <h3>Music</h3>
+        <p>Guitar, Piano, Singing, Music Theory</p>
+      </a>
+      
+      <a href="{{ url_for('browse_skills', category='fitness') }}" class="category-card animate-fade-in" style="--delay: 0.4s">
+        <div class="category-icon">
+          <i class="fas fa-dumbbell"></i>
+        </div>
+        <h3>Fitness</h3>
+        <p>Yoga, HIIT, Dance, Nutrition</p>
+      </a>
+      
+      <a href="{{ url_for('browse_skills', category='professional') }}" class="category-card animate-fade-in" style="--delay: 0.5s">
+        <div class="category-icon">
+          <i class="fas fa-briefcase"></i>
+        </div>
+        <h3>Professional</h3>
+        <p>Public Speaking, Leadership, Resume Writing</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="join-community">
+  <div class="container">
+    <div class="text-center animate-fade-in">
+      <h2>Join Our Growing Community Today</h2>
+      <p class="mb-4">Connect with like-minded individuals passionate about lifelong learning</p>
+      <a href="{{ url_for('register') }}" class="btn btn-lg btn-primary animate-pulse">Sign Up Now - It's Free!</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Animation trigger on scroll
+    const animatedElements = document.querySelectorAll('.animate-slide-up, .animate-fade-in');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    animatedElements.forEach(el => {
+      observer.observe(el);
+    });
+  });
+</script>
+{% endblock %}
