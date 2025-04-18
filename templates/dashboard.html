@@ -1,0 +1,108 @@
+{% extends 'layout.html' %}
+
+{% block title %}Dashboard | SkillSwap{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <div>
+      <a href="{{ url_for('add_skill') }}" class="btn btn-primary">Add New Skill</a>
+    </div>
+  </div>
+  
+  <div class="dashboard-stats">
+    <div class="stat-card">
+      <div class="stat-value">{{ skills_count }}</div>
+      <div class="stat-label">Skills Offered</div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-value">{{ requests_count }}</div>
+      <div class="stat-label">Active Requests</div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-value">{{ messages_count }}</div>
+      <div class="stat-label">New Messages</div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-value">{{ connections_count }}</div>
+      <div class="stat-label">Connections</div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3 class="card-title">My Skills</h3>
+        </div>
+        <div class="card-body">
+          {% if my_skills %}
+            <div class="skills-grid">
+              {% for skill in my_skills %}
+                <div class="skill-card card mb-3">
+                  <div class="card-body skill-card-body">
+                    <div class="skill-category">
+                      <span class="badge badge-primary">{{ skill.category }}</span>
+                    </div>
+                    <h4 class="skill-title">{{ skill.title }}</h4>
+                    <p class="skill-description">{{ skill.description|truncate(100) }}</p>
+                  </div>
+                  <div class="card-footer">
+                    <a href="{{ url_for('edit_skill', skill_id=skill.id) }}" class="btn btn-sm btn-outline">Edit</a>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="mt-3">
+              <a href="{{ url_for('manage_skills') }}" class="btn btn-sm btn-outline">Manage All Skills</a>
+            </div>
+          {% else %}
+            <p class="text-center p-4">
+              You haven't added any skills yet.
+              <br>
+              <a href="{{ url_for('add_skill') }}" class="btn btn-primary mt-2">Add Your First Skill</a>
+            </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3 class="card-title">Recent Requests</h3>
+        </div>
+        <div class="card-body">
+          {% if recent_requests %}
+            <div class="request-list">
+              {% for request in recent_requests %}
+                <div class="request-item">
+                  <div class="request-header">
+                    <div class="request-skill">{{ request.skill.title }}</div>
+                    <div class="request-status {{ request.status }}">{{ request.status|capitalize }}</div>
+                  </div>
+                  <div class="request-message">
+                    "{{ request.message|truncate(100) }}"
+                  </div>
+                  <div class="request-actions">
+                    <a href="{{ url_for('view_request', request_id=request.id) }}" class="btn btn-sm btn-outline">View Details</a>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="mt-3">
+              <a href="{{ url_for('requests') }}" class="btn btn-sm btn-outline">View All Requests</a>
+            </div>
+          {% else %}
+            <p class="text-center p-4">No requests yet.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

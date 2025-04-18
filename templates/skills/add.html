@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block title %}Add New Skill | SkillSwap{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>Add a New Skill</h1>
+    <p>Share your expertise with the community by adding a skill you can teach.</p>
+  </div>
+  
+  {% if error %}
+    <div class="alert alert-danger mb-3">{{ error }}</div>
+  {% endif %}
+  
+  <div class="card">
+    <div class="card-body">
+      <form action="{{ url_for('add_skill') }}" method="post">
+        <div class="form-group">
+          <label for="title" class="form-label">Skill Title</label>
+          <input type="text" id="title" name="title" class="form-control" placeholder="e.g., Python Programming" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="category" class="form-label">Category</label>
+          <select id="category" name="category" class="form-control" required>
+            <option value="">Select a category</option>
+            <option value="Technology">Technology</option>
+            <option value="Languages">Languages</option>
+            <option value="Arts & Crafts">Arts & Crafts</option>
+            <option value="Music">Music</option>
+            <option value="Fitness">Fitness</option>
+            <option value="Professional">Professional</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="description" class="form-label">Description</label>
+          <textarea id="description" name="description" class="form-control" rows="4" placeholder="Provide a brief description of the skill..." required></textarea>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Add Skill</button>
+          <a href="{{ url_for('dashboard') }}" class="btn btn-outline">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends 'layout.html' %}
+
+{% block title %}Messages | SkillSwap{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="mb-4">Messages</h1>
+  
+  <div class="messages-container">
+    <div class="messages-sidebar">
+      {% if conversations %}
+        {% for conversation in conversations %}
+          <div class="conversation-item {% if conversation.id == active_conversation.id %}active{% endif %}"
+               data-conversation-id="{{ conversation.id }}">
+            <div class="conversation-header">
+              <div class="conversation-name">{{ conversation.other_user.name }}</div>
+              <div class="conversation-time">{{ conversation.last_message.created_at|timeago }}</div>
+            </div>
+            <div class="conversation-preview">
+              {{ conversation.last_message.content|truncate(30) }}
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="p-4 text-center">
+          <p>No conversations yet.</p>
+          <p class="mt-2">
+            <a href="{{ url_for('browse_skills') }}" class="btn btn-sm btn-primary">Find Skills</a>
+          </p>
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="messages-content">
+      {% if active_conversation %}
+        <div class="messages-header">
+          <div class="messages-header-avatar">
+            {{ active_conversation.other_user.name[:1] }}
+          </div>
+          <div>
+            <div class="messages-header-name">{{ active_conversation.other_user.name }}</div>
+            <div class="text-muted">
+              {% if active_conversation.skill %}
+                Regarding: {{ active_conversation.skill.title }}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        
+        <div class="messages-body" id="messages-container">
+          {% for message in active_conversation.messages %}
+            <div class="message {% if message.user_id == current_user.id %}message-sent{% else %}message-received{% endif %}">
+              {{ message.content }}
+              <div class="message-time">{{ message.created_at|timeago }}</div>
+            </div>
+          {% endfor %}
+        </div>
+        
+        <div class="messages-footer">
+          <form class="message-form" id="message-form" data-conversation-id="{{ active_conversation.id }}">
+            <input type="text" class="form-control message-input" id="message-input" placeholder="Type your message..." required>
+            <button type="submit" class="btn btn-primary">Send</button>
+          </form>
+        </div>
+      {% else %}
+        <div class="d-flex flex-column justify-content-center align-items-center h-100 p-4 text-center">
+          <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+          <h3>No conversation selected</h3>
+          <p class="text-muted">Select a conversation from the sidebar or start a new one.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Auto scroll to bottom of messages
+  function scrollToBottom() {
+    const container = document.getElementById('messages-container');
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }
+  
+  // Run on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    scrollToBottom();
+    
+    // Set up message form
+    const form = document.getElementById('message-form');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const input = document.getElementById('message-input');
+        const message = input.value.trim();
+        const conversationId = form.dataset.conversationId;
+        
+        if (message) {
+          // Send message via AJAX
+          sendMessage(conversationId, message).then(response => {
+            if (response.success) {
+              // Add message to UI
+              const messagesContainer = document.getElementById('messages-container');
+              const messageDiv = document.createElement('div');
+              messageDiv.className = 'message message-sent';
+              messageDiv.innerHTML = `
+                ${message}
+                <div class="message-time">Just now</div>
+              `;
+              messagesContainer.appendChild(messageDiv);
+              
+              // Clear input and scroll to bottom
+              input.value = '';
+              scrollToBottom();
+            }
+          });
+        }
+      });
+    }
+    
+    // Set up conversation item click handler
+    const conversationItems = document.querySelectorAll('.conversation-item');
+    conversationItems.forEach(item => {
+      item.addEventListener('click', function() {
+        const conversationId = this.dataset.conversationId;
+        window.location.href = `/messages/${conversationId}`;
+      });
+    });
+  });
+  
+  // Function to send message via AJAX
+  async function sendMessage(conversationId, content) {
+    try {
+      const response = await fetch('/api/messages/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          conversation_id: conversationId,
+          content: content
+        })
+      });
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error sending message:', error);
+      return { success: false };
+    }
+  }
+</script>
+{% endblock %}

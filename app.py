@@ -4,12 +4,17 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 from functools import wraps
+from config import config
+from helpers import save_file, format_date
 
 # Initialize Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///skillswap.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Load configuration
+app.config.from_object(config['development'])  # Use 'production' for production environment
 
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
