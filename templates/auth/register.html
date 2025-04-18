@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+
+{% block title %}Sign Up | SkillSwap{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-form animate-fade-in">
+    <h2 class="auth-title">Create an Account</h2>
+    
+    {% if error %}
+      <div class="alert alert-danger mb-3">{{ error }}</div>
+    {% endif %}
+    
+    <form action="{{ url_for('register') }}" method="post" data-validate="true">
+      <div class="form-group">
+        <label for="name" class="form-label">Full Name</label>
+        <input type="text" id="name" name="name" class="form-control" required
+               data-error-message="Please enter your name">
+      </div>
+      
+      <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" name="email" class="form-control" required
+               data-error-message="Please enter a valid email address">
+      </div>
+      
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" id="password" name="password" class="form-control" required
+               minlength="8" data-error-message="Password must be at least 8 characters">
+        <small class="form-text">Must be at least 8 characters long</small>
+      </div>
+      
+      <div class="form-group">
+        <label for="confirm-password" class="form-label">Confirm Password</label>
+        <input type="password" id="confirm-password" name="confirm_password" class="form-control" required
+               data-error-message="Passwords must match">
+      </div>
+      
+      <div class="form-group">
+        <div class="d-flex align-items-center gap-2">
+          <input type="checkbox" id="terms" name="terms" class="form-check" required
+                 data-error-message="You must agree to the Terms and Conditions">
+          <label for="terms">I agree to the <a href="{{ url_for('terms') }}">Terms and Conditions</a></label>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+      </div>
+    </form>
+    
+    <div class="auth-footer">
+      Already have an account? <a href="{{ url_for('login') }}">Log in</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

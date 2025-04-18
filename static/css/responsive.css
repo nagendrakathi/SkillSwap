@@ -1,0 +1,125 @@
+/* Mobile and Responsive Styles */
+@media (max-width: 991px) {
+    .container {
+      max-width: 100%;
+      padding: 0 1.5rem;
+    }
+    
+    .col-4, .col-3 {
+      width: 50%;
+    }
+    
+    .hero-title {
+      font-size: 2.5rem;
+    }
+    
+    .messages-container {
+      flex-direction: column;
+    }
+    
+    .messages-sidebar {
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .navbar-menu {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: white;
+      box-shadow: var(--shadow);
+      padding: 1rem;
+    }
+    
+    .navbar-menu.active {
+      display: flex;
+    }
+    
+    .navbar-toggle {
+      display: block;
+    }
+    
+    .hero {
+      padding: 4rem 0;
+    }
+    
+    .hero-title {
+      font-size: 2rem;
+    }
+    
+    .hero-cta {
+      flex-direction: column;
+    }
+    
+    .hero-cta .btn {
+      width: 100%;
+    }
+    
+    .footer-content {
+      flex-direction: column;
+    }
+    
+    .footer-section {
+      margin-bottom: 2rem;
+    }
+    
+    .dashboard-stats {
+      flex-direction: column;
+    }
+    
+    .dashboard-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .skills-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .profile-header {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .col-6, .col-4, .col-3 {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 575px) {
+    .request-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    
+    .request-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    
+    .request-actions .btn {
+      width: 100%;
+    }
+    
+    .modal {
+      width: 95%;
+    }
+    
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+    
+    .auth-form {
+      padding: 1.5rem;
+    }
+  }
